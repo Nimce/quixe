@@ -2863,15 +2863,12 @@ var GlkOte = function() {
             TabMode.tabModePrefix = false;
             if (currentValue !== false && currentValue != '') {
                 const val = currentValue.trim();
-                const lastSpace = val.lastIndexOf(" ");
-                var lastWord = val;
-
-                if (lastSpace != -1) {
-                    lastWord = val.substring(lastSpace + 1);
-                }
-
-                if (lastWord != '') {
-                    TabMode.addToMatchedWords(lastWord);
+                const valWords = val.split(' ');
+                for (var i in valWords) {
+                    let valWord = valWords[i].trim();
+                    if (valWord != '') {
+                        TabMode.addToMatchedWords(valWord);
+                    }
                 }
             }
         },
