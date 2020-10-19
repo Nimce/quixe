@@ -321,7 +321,7 @@ var GlkOte = function() {
          buffer window fonts can be non-fixed-width, and styles can have
          different point sizes)
        - the amount of padding space around buffer and grid window content
-
+    
        This stuff is determined by creating some invisible, offscreen windows
        and measuring their dimensions.
     */
@@ -351,7 +351,9 @@ var GlkOte = function() {
 
         /* Create a dummy layout div containing a grid window and a buffer window,
            each with two lines of text. */
-        var layout_test_pane = $('<div>', { 'id': 'layout_test_pane' });
+        var layout_test_pane = $('<div>', {
+            'id': 'layout_test_pane'
+        });
         layout_test_pane.text('This should not be visible');
         layout_test_pane.css({
             /* "display:none" would make the pane not render at all, making it
@@ -361,23 +363,33 @@ var GlkOte = function() {
             left: '-1000px'
         });
         var line = $('<div>');
-        line.append($('<span>', { 'class': "Style_normal" }).text('12345678'));
+        line.append($('<span>', {
+            'class': "Style_normal"
+        }).text('12345678'));
 
-        var gridwin = $('<div>', { 'class': 'WindowFrame GridWindow' });
+        var gridwin = $('<div>', {
+            'class': 'WindowFrame GridWindow'
+        });
         var gridline1 = line.clone().addClass('GridLine').appendTo(gridwin);
         var gridline2 = line.clone().addClass('GridLine').appendTo(gridwin);
         var gridspan = gridline1.children('span');
         layout_test_pane.append(gridwin);
 
-        var bufwin = $('<div>', { 'class': 'WindowFrame BufferWindow' });
+        var bufwin = $('<div>', {
+            'class': 'WindowFrame BufferWindow'
+        });
         var bufline1 = line.clone().addClass('BufferLine').appendTo(bufwin);
         var bufline2 = line.clone().addClass('BufferLine').appendTo(bufwin);
-        var invcurspan = $('<span>', { 'class': 'InvisibleCursor' }).text(NBSP);
+        var invcurspan = $('<span>', {
+            'class': 'InvisibleCursor'
+        }).text(NBSP);
         bufline2.append(invcurspan);
         var bufspan = bufline1.children('span');
         layout_test_pane.append(bufwin);
 
-        var graphwin = $('<div>', { 'class': 'WindowFrame GraphicsWindow' });
+        var graphwin = $('<div>', {
+            'class': 'WindowFrame GraphicsWindow'
+        });
         var graphcanvas = $('<canvas>');
         graphcanvas.attr('width', 64);
         graphcanvas.attr('height', 32);
@@ -496,7 +508,7 @@ var GlkOte = function() {
     /* Create invisible divs in the gameport which will fire events if the
        gameport changes size. (For any reason, including document CSS changes.
        We need this to detect Lectrote's margin change, for example.)
-
+    
        This code is freely adapted from CSS Element Queries by Marc J. Schmidt.
        https://github.com/marcj/css-element-queries
     */
@@ -722,16 +734,25 @@ var GlkOte = function() {
                             prevel.remove();
                     } else {
                         if (!moreel.length) {
-                            moreel = $('<div>', { id: 'win' + win.id + '_moreprompt', 'class': 'MorePrompt' });
+                            moreel = $('<div>', {
+                                id: 'win' + win.id + '_moreprompt',
+                                'class': 'MorePrompt'
+                            });
                             moreel.append('More');
                             /* 20 pixels is a cheap approximation of a scrollbar-width. */
                             var morex = win.coords.right + approx_scroll_width;
                             var morey = win.coords.bottom;
-                            moreel.css({ bottom: morey + 'px', right: morex + 'px' });
+                            moreel.css({
+                                bottom: morey + 'px',
+                                right: morex + 'px'
+                            });
                             $('#' + windowport_id, dom_context).append(moreel);
                         }
                         if (!prevel.length) {
-                            prevel = $('<div>', { id: 'win' + win.id + '_prevmark', 'class': 'PreviousMark' });
+                            prevel = $('<div>', {
+                                id: 'win' + win.id + '_prevmark',
+                                'class': 'PreviousMark'
+                            });
                             frameel.prepend(prevel);
                         }
                         prevel.css('top', (win.pagefrommark + 'px'));
@@ -828,13 +849,15 @@ var GlkOte = function() {
 
     /* Handle all the window changes. The argument lists all windows that
        should be open. Any unlisted windows, therefore, get closed.
-
+    
        Note that if there are no changes to the window state, this function
        will not be called. This is different from calling this function with
        an empty argument object (which would mean "close all windows").
     */
     function accept_windowset(arg) {
-        jQuery.each(windowdic, function(winid, win) { win.inplace = false; });
+        jQuery.each(windowdic, function(winid, win) {
+            win.inplace = false;
+        });
         jQuery.map(arg, accept_one_window);
 
         /* Close any windows not mentioned in the argument. */
@@ -858,7 +881,11 @@ var GlkOte = function() {
         win = windowdic[arg.id];
         if (win == null) {
             /* The window must be created. */
-            win = { id: arg.id, type: arg.type, rock: arg.rock };
+            win = {
+                id: arg.id,
+                type: arg.type,
+                rock: arg.rock
+            };
             windowdic[arg.id] = win;
             var typeclass;
             if (win.type == 'grid')
@@ -896,7 +923,12 @@ var GlkOte = function() {
             win.needspaging = false;
             win.topunseen = 0;
             win.pagefrommark = 0;
-            win.coords = { left: null, top: null, right: null, bottom: null };
+            win.coords = {
+                left: null,
+                top: null,
+                right: null,
+                bottom: null
+            };
             win.history = new Array();
             win.historypos = 0;
             $('#' + windowport_id, dom_context).append(frameel);
@@ -913,7 +945,10 @@ var GlkOte = function() {
             var ix;
             if (arg.gridheight > win.gridheight) {
                 for (ix = win.gridheight; ix < arg.gridheight; ix++) {
-                    var el = $('<div>', { id: 'win' + win.id + '_ln' + ix, 'class': 'GridLine' });
+                    var el = $('<div>', {
+                        id: 'win' + win.id + '_ln' + ix,
+                        'class': 'GridLine'
+                    });
                     el.append(NBSP);
                     win.frameel.append(el);
                 }
@@ -939,7 +974,9 @@ var GlkOte = function() {
                 win.graphwidth = arg.graphwidth;
                 win.graphheight = arg.graphheight;
                 win.defcolor = '#FFF';
-                el = $('<canvas>', { id: 'win' + win.id + '_canvas' });
+                el = $('<canvas>', {
+                    id: 'win' + win.id + '_canvas'
+                });
                 /* The pixel-ratio code here should work correctly on Chrome and
                    Safari, on screens of any pixel-ratio. I followed
                    http://www.html5rocks.com/en/tutorials/canvas/hidpi/ .
@@ -989,7 +1026,9 @@ var GlkOte = function() {
                        that from inside the accept handler. We'll set up a deferred
                        function call. */
                     var funcarg = win.id;
-                    defer_func(function() { send_window_redraw(funcarg); });
+                    defer_func(function() {
+                        send_window_redraw(funcarg);
+                    });
                 }
             }
         }
@@ -1110,11 +1149,16 @@ var GlkOte = function() {
                             rtext = content[sx];
                             rlink = undefined;
                         }
-                        var el = $('<span>', { 'class': 'Style_' + rstyle });
+                        var el = $('<span>', {
+                            'class': 'Style_' + rstyle
+                        });
                         if (rlink == undefined) {
                             insert_text_detecting(el, rtext);
                         } else {
-                            var ael = $('<a>', { 'href': '#', 'class': 'Internal' });
+                            var ael = $('<a>', {
+                                'href': '#',
+                                'class': 'Internal'
+                            });
                             ael.text(rtext);
                             ael.on('click', build_evhan_hyperlink(win.id, rlink));
                             el.append(ael);
@@ -1154,17 +1198,17 @@ var GlkOte = function() {
                 text = [];
 
             /* Each line we receive has a flag indicating whether it *starts*
-               a new paragraph. (If the flag is false, the line gets appended
-               to the previous paragraph.)
-
-               We have to keep track of a flag per paragraph div. The blankpara
-               flag indicates whether this is a completely empty paragraph (a
-               blank line). We have to drop a NBSP into empty paragraphs --
-               otherwise they'd collapse -- and so this flag lets us distinguish
-               between an empty paragraph and one which truly contains a NBSP.
-               (The difference is, when you append data to a truly empty paragraph,
-               you have to delete the placeholder NBSP.)
-            */
+           a new paragraph. (If the flag is false, the line gets appended
+           to the previous paragraph.)
+    
+           We have to keep track of a flag per paragraph div. The blankpara
+           flag indicates whether this is a completely empty paragraph (a
+           blank line). We have to drop a NBSP into empty paragraphs --
+           otherwise they'd collapse -- and so this flag lets us distinguish
+           between an empty paragraph and one which truly contains a NBSP.
+           (The difference is, when you append data to a truly empty paragraph,
+           you have to delete the placeholder NBSP.)
+        */
 
             for (ix = 0; ix < text.length; ix++) {
                 var textarg = text[ix];
@@ -1177,7 +1221,9 @@ var GlkOte = function() {
                 }
                 if (divel == null) {
                     /* Create a new paragraph div */
-                    divel = $('<div>', { 'class': 'BufferLine' });
+                    divel = $('<div>', {
+                        'class': 'BufferLine'
+                    });
                     divel.data('blankpara', true);
                     win.frameel.append(divel);
                 }
@@ -1185,7 +1231,9 @@ var GlkOte = function() {
                     divel.addClass('FlowBreak');
                 if (!content || !content.length) {
                     if (divel.data('blankpara'))
-                        divel.append($('<span>', { 'class': 'BlankLineSpan' }).text(NBSP));
+                        divel.append($('<span>', {
+                            'class': 'BlankLineSpan'
+                        }).text(NBSP));
                     continue;
                 }
                 if (divel.data('blankpara')) {
@@ -1238,7 +1286,10 @@ var GlkOte = function() {
                                         break;
                                 }
                                 if (rdesc.hyperlink != undefined) {
-                                    var ael = $('<a>', { 'href': '#', 'class': 'Internal' });
+                                    var ael = $('<a>', {
+                                        'href': '#',
+                                        'class': 'Internal'
+                                    });
                                     ael.append(el);
                                     ael.on('click', build_evhan_hyperlink(win.id, rdesc.hyperlink));
                                     el = ael;
@@ -1258,11 +1309,16 @@ var GlkOte = function() {
                         rtext = content[sx];
                         rlink = undefined;
                     }
-                    var el = $('<span>', { 'class': 'Style_' + rstyle });
+                    var el = $('<span>', {
+                        'class': 'Style_' + rstyle
+                    });
                     if (rlink == undefined) {
                         insert_text_detecting(el, rtext);
                     } else {
-                        var ael = $('<a>', { 'href': '#', 'class': 'Internal' });
+                        var ael = $('<a>', {
+                            'href': '#',
+                            'class': 'Internal'
+                        });
                         ael.text(rtext);
                         ael.on('click', build_evhan_hyperlink(win.id, rlink));
                         el.append(ael);
@@ -1298,7 +1354,10 @@ var GlkOte = function() {
                paragraph div. We use this to position the input box. */
             var divel = buffer_last_line(win);
             if (divel) {
-                cursel = $('<span>', { id: 'win' + win.id + '_cursor', 'class': 'InvisibleCursor' });
+                cursel = $('<span>', {
+                    id: 'win' + win.id + '_cursor',
+                    'class': 'InvisibleCursor'
+                });
                 cursel.append(NBSP);
                 divel.append(cursel);
 
@@ -1348,7 +1407,9 @@ var GlkOte = function() {
                 var op = draw[ix];
                 /* We'll be paranoid and clone the op object, throwing in a window
                    number. */
-                var newop = { winid: win.id };
+                var newop = {
+                    winid: win.id
+                };
                 jQuery.extend(newop, op);
                 graphics_draw_queue.push(newop);
             }
@@ -1359,7 +1420,7 @@ var GlkOte = function() {
     }
 
     /* Handle all necessary removal of input fields.
-
+    
        A field needs to be removed if it is not listed in the input argument,
        *or* if it is listed with a later generation number than we remember.
        (The latter case means that input was cancelled and restarted.)
@@ -1490,7 +1551,10 @@ var GlkOte = function() {
             if (win.type == 'buffer') {
                 var cursel = $('#win' + win.id + '_cursor', dom_context);
                 if (!cursel.length) {
-                    cursel = $('<span>', { id: 'win' + win.id + '_cursor', 'class': 'InvisibleCursor' });
+                    cursel = $('<span>', {
+                        id: 'win' + win.id + '_cursor',
+                        'class': 'InvisibleCursor'
+                    });
                     cursel.append(NBSP);
                     win.frameel.append(cursel);
                 }
@@ -1587,10 +1651,10 @@ var GlkOte = function() {
 
     /* Set windows_paging_count to the number of windows that need paging.
        If that's nonzero, pick an appropriate window for the paging focus.
-
+    
        The canfocus flag determines whether this function can jump to an
        input field focus (should paging be complete).
-
+    
        This must be called whenever a window's needspaging flag changes.
     */
     function readjust_paging_focus(canfocus) {
@@ -1647,14 +1711,14 @@ var GlkOte = function() {
 
     /* Set the DOM context. This is the jQuery element within which all Glk
        DOM elements are looked up. (#gameport, #windowport, etc.)
-
+    
        In normal usage this is always undefined (meaning, DOM elements are
        searched for within the entire document). This is a fast case;
        jQuery optimizes for it. However, some apps (not Quixe!) want to 
        detach the Glk DOM and maintain it off-screen. That's possible if you 
        set the DOM context to the detached element. I think (although I have
        not tested) that this configuration is less well-optimized.
-
+    
        You cannot use this to maintain two separate Glk DOMs in the same
        document. Sorry.
     */
@@ -1704,7 +1768,7 @@ var GlkOte = function() {
 
     /* Display the red error pane, with a message in it. This is called on
        fatal errors.
-
+    
        Deliberately does not use any jQuery functionality, because this
        is called when jQuery couldn't be loaded.
     */
@@ -1726,12 +1790,12 @@ var GlkOte = function() {
     }
 
     /* Displays a blue warning pane, with a message in it.
-
+    
        Unlike glkote_error, a warning can be removed (call glkote_warning with
        no argument). The warning pane is intrusive, so it should be used for
        for conditions that interrupt or suspend normal play. An error overrides
        a warning.
-
+    
        (Quixe uses this to display an "end of session" message.)
     */
     function glkote_warning(msg) {
@@ -1776,7 +1840,7 @@ var GlkOte = function() {
 
     /* Hide the loading pane (the spinny compass), if it hasn't already been
        hidden.
-
+    
        Deliberately does not use any jQuery functionality.
     */
     function hide_loading() {
@@ -1791,7 +1855,7 @@ var GlkOte = function() {
     }
 
     /* Show the loading pane (the spinny compass), if it isn't already visible.
-
+    
        Deliberately does not use any jQuery functionality.
     */
     function show_loading() {
@@ -1806,7 +1870,7 @@ var GlkOte = function() {
     }
 
     /* Remove all children from a DOM element. (Not a jQuery collection!)
-
+    
        Deliberately does not use any jQuery functionality.
     */
     function remove_children(parent) {
@@ -1847,7 +1911,11 @@ var GlkOte = function() {
             /* For 'match', we test the entire span of text to see if it's a URL.
                This is simple and fast. */
             if (regex_external_links.test(val)) {
-                var ael = $('<a>', { 'href': val, 'class': 'External', 'target': '_blank' });
+                var ael = $('<a>', {
+                    'href': val,
+                    'class': 'External',
+                    'target': '_blank'
+                });
                 ael.text(val);
                 el.append(ael);
                 return;
@@ -1867,7 +1935,11 @@ var GlkOte = function() {
                     el.append(document.createTextNode(prefix));
                 }
                 /* Add the URL. */
-                var ael = $('<a>', { 'href': match[0], 'class': 'External', 'target': '_blank' });
+                var ael = $('<a>', {
+                    'href': match[0],
+                    'class': 'External',
+                    'target': '_blank'
+                });
                 ael.text(match[0]);
                 el.append(ael);
                 /* Continue searching after the URL. */
@@ -1898,7 +1970,7 @@ var GlkOte = function() {
        It will do simple fills synchronously, but image draws must be
        handled in a callback (because the image data might need to be pulled
        from the server).
-
+    
        If the loadedimg argument is null, this was called to take care of
        new drawing ops. On an image draw, we call back here with loadedimg
        as the Image DOM object that succeeded (or failed).
@@ -1981,8 +2053,12 @@ var GlkOte = function() {
                         }
                         //glkote_log('### setting up callback with url');
                         var newimg = new Image();
-                        $(newimg).on('load', function(ev) { perform_graphics_ops(newimg, ev); });
-                        $(newimg).on('error', function(ev) { perform_graphics_ops(newimg, null); });
+                        $(newimg).on('load', function(ev) {
+                            perform_graphics_ops(newimg, ev);
+                        });
+                        $(newimg).on('error', function(ev) {
+                            perform_graphics_ops(newimg, null);
+                        });
                         /* Setting the src attribute will trigger one of the above
                            callbacks. */
                         newimg.src = imgurl;
@@ -2022,7 +2098,9 @@ var GlkOte = function() {
        properties, recursively. (Do not call this on an object which references
        anything big!) */
     function inspect_deep(res) {
-        var keys = jQuery.map(res, function(val, key) { return key; });
+        var keys = jQuery.map(res, function(val, key) {
+            return key;
+        });
         keys.sort();
         var els = jQuery.map(keys, function(key) {
             var val = res[key];
@@ -2037,7 +2115,9 @@ var GlkOte = function() {
 
     /* Debugging utility: same as above, but only one level deep. */
     function inspect_shallow(res) {
-        var keys = jQuery.map(res, function(val, key) { return key; });
+        var keys = jQuery.map(res, function(val, key) {
+            return key;
+        });
         keys.sort();
         var els = jQuery.map(keys, function(key) {
             var val = res[key];
@@ -2074,10 +2154,10 @@ var GlkOte = function() {
     /* Invoke the game interface's accept() method, passing along an input
        event, and also including all the information about incomplete line
        inputs.
-
+    
        This is called by each event handler that can signal a completed input
        event.
-
+    
        The val and val2 arguments are only used by certain event types, which
        is why most of the invocations pass three arguments instead of four.
     */
@@ -2094,7 +2174,10 @@ var GlkOte = function() {
         var winid = 0;
         if (win)
             winid = win.id;
-        var res = { type: type, gen: generation };
+        var res = {
+            type: type,
+            gen: generation
+        };
         generation_sent = generation;
 
         if (type == 'line') {
@@ -2270,11 +2353,11 @@ var GlkOte = function() {
     /* Send a wrapped-up state off to an AJAX handler. The state is a JSONable
        object containing input, output, and timestamps. The format of the input
        and output depends on the recording parameters.
-
+    
        (The timestamp field refers to the input time, which is what you generally
        care about. The outtimestamp will nearly always follow very closely. If
        there's a long gap, you know your game has spent a long time computing.)
-
+    
        If the AJAX request returns an error, this shuts off recording (rather
        than trying again for future commands).
     */
@@ -2295,9 +2378,9 @@ var GlkOte = function() {
     /* DOM event handlers. */
 
     /* Detect the browser window being resized.
-
+    
        This event is triggered by several causes:
-
+    
        - A real window DOM resize event. (This should include "make font
        bigger/smaller".)
        - Autorestore. (The window might be a different size than the autosave
@@ -2320,15 +2403,15 @@ var GlkOte = function() {
     /* This executes when no new resize events have come along in the past
        0.20 seconds. (But if the UI is disabled, we delay again, because
        the game can't deal with events yet.)
-
+    
        Note that this sends a Glk "arrange" event, not a "redraw" event.
        Those will follow soon if needed.
-
+    
        (What actually happens, and I apologize for this, is that the
        "arrange" event causes the game to send new window sizes. The
        accept handler sees a size change for a graphics window and queues
        up a "redraw" event via send_window_redraw.)
-
+    
        ### We really should distinguish between disabling the UI (delay
        resize events) from shutting down the UI (ignore resize events).
      */
@@ -2353,7 +2436,7 @@ var GlkOte = function() {
 
     /* Send a "redraw" event for the given (graphics) window. This is triggered
        by the accept handler when it sees a graphics window change size.
-
+    
        (Not actually an event handler, but I put it down here with
        doc_resize_real.)
     */
@@ -2400,14 +2483,16 @@ var GlkOte = function() {
                     /* We have to trigger a redraw event for this window. But we can't do
                        a bunch of them from the same handler. We'll set up a deferred
                        function call. */
-                    defer_func(function() { send_window_redraw(winid); });
+                    defer_func(function() {
+                        send_window_redraw(winid);
+                    });
                 }
             });
         }
     }
 
     /* Event handler: keypress events on input fields.
-
+    
        Move the input focus to whichever window most recently had it.
     */
     function evhan_doc_keypress(ev) {
@@ -2531,7 +2616,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: mousedown events on windows.
-
+    
        Remember which window the user clicked in last, as a hint for setting
        the focus. (Input focus and paging focus are tracked separately.)
     */
@@ -2613,7 +2698,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: keydown events on input fields (character input)
-
+    
        Detect the arrow keys, and a few other special keystrokes, for
        character input. We don't grab *all* keys here, because that would
        include modifier keys (shift, option, etc) -- we don't want to
@@ -2716,7 +2801,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: keypress events on input fields (character input)
-
+    
        Detect all printable characters. (Arrow keys and such don't generate
        a keypress event on all browsers, which is why we grabbed them in
        the keydown handler, above.)
@@ -2820,7 +2905,7 @@ var GlkOte = function() {
     };
 
     /* Event handler: keydown events on input fields (line input)
-
+    
        Divert the up and down arrow keys to scroll through the command history
        for this window. */
     function evhan_input_keydown(ev) {
@@ -2828,56 +2913,56 @@ var GlkOte = function() {
         if (ev) keycode = ev.keyCode; //### ev.which?
         if (!keycode) return true;
 
-        if (keycode == key_codes.KEY_UP || keycode == key_codes.KEY_DOWN) {
+        if (keycode == key_codes.KEY_TAB) {
             var winid = $(this).data('winid');
             var win = windowdic[winid];
             if (!win || !win.input)
                 return true;
 
-            if (keycode == key_codes.KEY_TAB) {
-                var winid = $(this).data('winid');
-                var win = windowdic[winid];
-                if (!win || !win.input)
-                    return true;
+            if (TabMode.enabled) {
+                const val = this.value.trim();
+                const lastSpace = val.lastIndexOf(" ");
+                var valTrimmed = '';
 
-                if (TabMode.enabled) {
-                    const val = this.value.trim();
-                    const lastSpace = val.lastIndexOf(" ");
-                    var valTrimmed = '';
-
-                    if (lastSpace != -1) {
-                        valTrimmed = val.substring(0, lastSpace + 1);
-                    }
-
-                    const nextSuggestion = TabMode.getNextSuggestion();
-                    if (nextSuggestion != '') {
-                        this.value = valTrimmed + nextSuggestion;
-                    }
-
-                } else {
-                    const val = this.value.trim();
-                    const lastSpace = val.lastIndexOf(" ");
-                    var lastWord = val;
-                    var valTrimmed = '';
-
-                    if (lastSpace != -1) {
-                        lastWord = val.substring(lastSpace + 1);
-                        valTrimmed = val.substring(0, lastSpace + 1);
-                    }
-
-                    if (lastWord != '') {
-                        TabMode.enable(lastWord);
-                    }
-
-                    const nextSuggestion = TabMode.getNextSuggestion();
-                    if (nextSuggestion != '') {
-                        this.value = valTrimmed + nextSuggestion;
-                    }
+                if (lastSpace != -1) {
+                    valTrimmed = val.substring(0, lastSpace + 1);
                 }
 
-                return false;
-            } else if (keycode == key_codes.KEY_UP && win.historypos > 0) {
-                TabMode.reset(false);
+                const nextSuggestion = TabMode.getNextSuggestion();
+                if (nextSuggestion != '') {
+                    this.value = valTrimmed + nextSuggestion;
+                }
+
+            } else {
+                const val = this.value.trim();
+                const lastSpace = val.lastIndexOf(" ");
+                var lastWord = val;
+                var valTrimmed = '';
+
+                if (lastSpace != -1) {
+                    lastWord = val.substring(lastSpace + 1);
+                    valTrimmed = val.substring(0, lastSpace + 1);
+                }
+
+                if (lastWord != '') {
+                    TabMode.enable(lastWord);
+                }
+
+                const nextSuggestion = TabMode.getNextSuggestion();
+                if (nextSuggestion != '') {
+                    this.value = valTrimmed + nextSuggestion;
+                }
+            }
+
+            return false;
+        } else if (keycode == key_codes.KEY_UP || keycode == key_codes.KEY_DOWN) {
+            var winid = $(this).data('winid');
+            var win = windowdic[winid];
+            if (!win || !win.input)
+                return true;
+
+            TabMode.reset(false);
+            if (keycode == key_codes.KEY_UP && win.historypos > 0) {
                 win.historypos -= 1;
                 if (win.historypos < win.history.length)
                     this.value = win.history[win.historypos];
@@ -2913,7 +2998,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: keypress events on input fields (line input)
-
+    
        Divert the enter/return key to submit a line of input.
     */
     function evhan_input_keypress(ev) {
@@ -2935,7 +3020,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: focus events on input fields
-
+    
        Notice that the focus has switched to a line/char input field.
     */
     function evhan_input_focus(ev) {
@@ -2950,7 +3035,7 @@ var GlkOte = function() {
     }
 
     /* Event handler: blur events on input fields
-
+    
        Notice that the focus has switched away from a line/char input field.
     */
     function evhan_input_blur(ev) {
@@ -3023,7 +3108,7 @@ var GlkOte = function() {
     /* Event handler constructor: report a click on a hyperlink
        (This is a factory that returns an appropriate handler function, for
        stupid Javascript closure reasons.)
-
+    
        Generate the appropriate event for a hyperlink click. Return false,
        to suppress the default HTML action of hyperlinks.
     */
@@ -3088,6 +3173,8 @@ var GlkOte = function() {
 }();
 
 // Node-compatible behavior
-try { exports.GlkOte = GlkOte; } catch (ex) {};
+try {
+    exports.GlkOte = GlkOte;
+} catch (ex) {};
 
 /* End of GlkOte library. */
